@@ -1,68 +1,48 @@
-# Dockerized Python+SSH image 🐍🔐🐳
+# Docker container with Python and SSH server 🐳🐍🔐
 
-## Objective
+## Description
 
-This container provides the base Python container with a SSH server preinstalled that can be used
-to connect to the Python interpreter and upload files remotely, i.e. using PyCharm.
+This container provides the most recent official Python container with SSH server preinstalled.
 
-## How does it work?
+## Basic Setup
 
-By default, a non-root user, created on the Dockerfile, is used for normal operations.
-Is recommended to connect SSH using this non-root user, using the username `pythonssh` and the password `sshpass` by default.
-
-## How to deploy?
+This starts the container while listening for SSH connections on port 2222:
 
 ```bash
-docker run -d -p 2222:22 --name pythonssh davidlor/python-ssh
+docker run -d -v '/mnt/pythonssh':'/config':'rw' -p '2222:22/tcp' '<work-in-progress>'
 ```
 
-- Change `-p 2222:22` if you want to change the exposed port on the host machine (2222 to other prefered port)
-- Change the `--name` "pythonssh" if you want
+Note: The SSH username and password is randomly created and visible through the container logs (only on initial setup).
 
-### Connecting with root
+After the initial setup the `/config` (`/mnt/pythonssh` on your host machine) directory contains two files:
 
-If required, root user can be connected through SSH. However, you must set root password manually, following these steps:
+- `username.conf` containing the username
+- `password_hash.conf` containing the password hash
 
-- Enable root login on SSH (from within the container):
-    - Deploy a Docker container using this image as usual
-    - Run bash on it as root: `docker exec -it -u root pythonssh bash` (replace `pythonssh` with the container name or ID)
-    - Once you are inside the container, run: `echo "PermitRootLogin yes" >> /etc/ssh/sshd_config`
-    - Restart SSH service running `service ssh restart`
-- Set a password for root:
-    - Once you are inside the container, run `passwd` and you will be asked for a new password for the user root
-    - Run `exit` when done to quit the container
-- Now you can login with root through SSH
+## Advanced Setup
 
-## Mountpoints
-
-Mountpoints are defined on Dockerfile, so volumes will be automatically created if you do not define them.
-
-- You can mount the .ssh directory for the non-root user, to manage the valid SSH keys used to connect through SSH.
-    - Location: `/home/pythonssh/.ssh` (being `pythonssh` the username of the non-root account)
-- You can mount the /etc/ssh directory for keeping the ssh config files on a persistent volume
-    - Location: `/etc/ssh`
-
-## Usage
-
-Notice that the latest Python executable is located at `/usr/local/bin/python`. You must input this route i.e. in PyCharm.
-
-[Usage instructions for PyCharm](https://www.jetbrains.com/help/pycharm/configuring-remote-interpreters-via-ssh.html)
-
-## How to build?
-
-You can build your own image using this repository. This can be useful for changing the username/password or building for other platforms.
+This starts the container while setting username, password hash, user id and group id:
 
 ```bash
-git clone https://github.com/Pythoneiro/Dockerized-Python-SSH.git
-docker build -t "local/python-ssh" --build-arg USERNAME=pythonssh --build-arg USERPASS=sshpass Dockerized-Python-SSH
+docker run -d --name='pythonssh' -e USERNAME='pythonssh' -e PUID='99' -e PGID='100' -e PASSWORD_HASH='$6$b9jajAmHkEGDlAoM$3T8VBYIRlEj2MQ8syB4BuC6grcLIyoq56Ay2Lq1MsPj/KZd3JJFJeh.p97QT24oBIXhxGHpeOZ0Xt/h0PZJUY/' -v '/mnt/pythonssh_config':'/config':'rw' -p '2222:22/tcp'  '<work-in-progress>'
 ```
 
-- change `local/python-ssh` by your custom desired image name
-- change `pythonssh` by your custom desired username
-- change `sshpass` by your custom desired user password
+You could create the hash with the following command on your local machine:
+
+```bash
+openssl passwd -6 your_password_in_clear_text
+```
+
+Or you could even use `-e PASSWORD='your_password_in_clear_text'` once and remove it after the first `docker run ...` as the hash will be written to `/config/password_hash.conf` as mentioned above.
+
+## SSH keys
+
+As `/config` is the home directory of `USERNAME`, you can provide `/home/.ssh/authorized_keys` to connect by key instead of password.
 
 ## TODO
 
-- Customize user/password by ENV variables or "secret file"
 - Set SSH log level for getting an output on `/var/log/auth.log`
-- Install sudo
+- What happens if username does not start with "py" and has been changed?
+- Add option to disable login by password
+- Allow to set official Python tags (latest, slim, alpine, etc)
+
