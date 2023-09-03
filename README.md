@@ -14,7 +14,7 @@ docker run -d -v '/mnt/pythonssh':'/config':'rw' -p '2222:22/tcp' '<work-in-prog
 
 Note: The SSH username and password is randomly created and visible through the container logs (only on initial setup).
 
-After the initial setup the `/config` (`/mnt/pythonssh` on your host machine) directory contains two files:
+After the initial setup the `/config` directory (`/mnt/pythonssh` on your host machine) contains two files:
 
 - `username.conf` containing the username
 - `password_hash.conf` containing the password hash
