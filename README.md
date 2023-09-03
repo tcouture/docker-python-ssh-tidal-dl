@@ -33,7 +33,7 @@ You could create the hash with the following command on your local machine:
 openssl passwd -6 your_password_in_clear_text
 ```
 
-Or you could use `-e PASSWORD='your_password_in_clear_text'`, run the container once and remove `-e PASSWORD` and run the container again, as the hash will be permanently written to `/config/password_hash.conf` as mentioned above.
+Or you could add `-e PASSWORD='your_password_in_clear_text'` to your `docker run` command, run the container once and remove it again, as further runs will use the hash in `/config/password_hash.conf` as mentioned above.
 
 ## SSH keys
 
