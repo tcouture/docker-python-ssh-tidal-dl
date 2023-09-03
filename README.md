@@ -35,9 +35,9 @@ openssl passwd -6 your_password_in_clear_text
 
 Or you could add `-e PASSWORD='your_password_in_clear_text'` to your `docker run` command, run the container once and remove it again, as further runs will use the hash in `/config/password_hash.conf` as mentioned above.
 
-## SSH keys
+## Key-based SSH authentification
 
-As `/config` is the home directory of `USERNAME`, you can provide `/home/.ssh/authorized_keys` to connect by key instead of password.
+As `/config` is the home directory of `USERNAME`, you can provide `/config/.ssh/authorized_keys` to connect by key instead of password.
 
 ## TODO
 
