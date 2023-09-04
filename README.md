@@ -41,5 +41,4 @@ As `/config` is the home directory of `USERNAME`, you can provide `/config/.ssh/
 
 ## TODO
 
-- Add option to disable login by password
 - Allow to set official Python tags (latest, slim, alpine, etc)
