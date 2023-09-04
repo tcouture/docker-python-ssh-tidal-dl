@@ -41,6 +41,5 @@ As `/config` is the home directory of `USERNAME`, you can provide `/config/.ssh/
 
 ## TODO
 
-- Set SSH log level for getting an output on `/var/log/auth.log`
 - Add option to disable login by password
 - Allow to set official Python tags (latest, slim, alpine, etc)
