@@ -39,6 +39,6 @@ Or you could add `-e PASSWORD='your_password_in_clear_text'` to your `docker run
 
 As `/config` is the home directory of `USERNAME`, you can provide `/config/.ssh/authorized_keys` to connect by key instead of password.
 
-## TODO
+## Todo
 
 - Allow to set official Python tags (latest, slim, alpine, etc)
