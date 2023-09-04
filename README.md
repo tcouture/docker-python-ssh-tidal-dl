@@ -42,7 +42,5 @@ As `/config` is the home directory of `USERNAME`, you can provide `/config/.ssh/
 ## TODO
 
 - Set SSH log level for getting an output on `/var/log/auth.log`
-- What happens if username does not start with "py" and has been changed?
 - Add option to disable login by password
 - Allow to set official Python tags (latest, slim, alpine, etc)
-
