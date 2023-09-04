@@ -1,5 +1,10 @@
 #!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
 set -e
+
+# Turn of history expansion to allow echo'ing "!"
+set +H
 
 # Available environmental variables (config files have a higher priority):
 # USERNAME
@@ -19,9 +24,10 @@ fi
 
 # create random username (no config file and no environmental variable were provided)
 if [[ ! $USERNAME ]]; then
-    USERNAME=$(echo -n "py"; openssl rand -hex 2)
-    echo "SSH username is $USERNAME"
+    random_username=$(openssl rand -hex 2) # returns 4 random characters
+    USERNAME=$(echo -n "py$random_username") # guarantees that username starts with alphabetic character
 fi
+echo "SSH username is $USERNAME"
 
 # username has been changed
 old_username=$(grep ":pythonsshcomment:" /etc/passwd | grep --max-count=1 --invert-match "^$USERNAME:" | cut -d ':' -f 1 )
@@ -30,6 +36,7 @@ if [[ $old_username ]]; then
         echo "Warning: $old_username has been deleted as it was changed to $USERNAME."
     else
         echo "Error: $old_username could not be deleted!"
+        exit 1
     fi
 fi
 
@@ -55,8 +62,11 @@ groupadd --gid "$PGID" --system user-group 1>/dev/null || true
 
 # add user
 if ! grep --quiet "^$USERNAME:" /etc/passwd; then
-    echo "Information: $USERNAME will be added as new SSH user."
-    useradd --uid "$PUID" --gid "$PGID" --comment "pythonsshcomment" --home "/config" --shell "/bin/bash" --password "$PASSWORD_HASH" "$USERNAME"
+    if useradd --uid "$PUID" --gid "$PGID" --comment "pythonsshcomment" --home "/config" --shell "/bin/bash" --password "$PASSWORD_HASH" "$USERNAME"; then
+        echo "Success: $USERNAME has been added as new SSH user."
+    else
+        echo "Error: Could not add new user $USERNAME!"
+    fi
     chown --recursive --verbose "$PUID:$PGID" "/config" # update file owner
     echo "$USERNAME" > "/config/username.conf"
     echo "$PASSWORD_HASH" > "/config/password_hash.conf"
@@ -69,6 +79,7 @@ if ! grep "^$USERNAME:" /etc/shadow | grep --quiet "$PASSWORD_HASH"; then
         echo "Warning: Password of $USERNAME has been changed."
     else
         echo "Error: Could not change password of $USERNAME!"
+        exit 1
     fi
 fi
 
