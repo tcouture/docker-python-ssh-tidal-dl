@@ -24,7 +24,7 @@ After the initial setup the `/config` directory (`/mnt/pythonssh` on your host m
 This starts the container while setting username, password hash, user id and group id:
 
 ```bash
-docker run -d --name='pythonssh' -e USERNAME='pythonssh' -e PUID='99' -e PGID='100' -e PASSWORD_HASH='$6$b9jajAmHkEGDlAoM$3T8VBYIRlEj2MQ8syB4BuC6grcLIyoq56Ay2Lq1MsPj/KZd3JJFJeh.p97QT24oBIXhxGHpeOZ0Xt/h0PZJUY/' -v '/mnt/pythonssh':'/config':'rw' -p '2222:22/tcp'  '<work-in-progress>'
+docker run -d --name='pythonssh' -e USERNAME='pythonssh' -e PUID='99' -e PGID='100' -e PASSWORD_HASH='<password_hash>' -v '/mnt/pythonssh':'/config':'rw' -p '2222:22/tcp'  '<work-in-progress>'
 ```
 
 You could create the hash with the following command on your local machine:
