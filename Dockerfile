@@ -9,6 +9,9 @@ RUN pip3 install tidal-dl --upgrade
 # copy the entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
+# copy the tidal-dl startup script
+# COPY etc/bash.bashrc /etc
+
 # expose ssh port
 EXPOSE 22/tcp
 
