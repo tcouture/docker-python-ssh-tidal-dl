@@ -1,4 +1,4 @@
-# Docker container with Python and SSH server 🐳🐍🔐
+# Docker container with Python and SSH server
 
 ## Description
 
