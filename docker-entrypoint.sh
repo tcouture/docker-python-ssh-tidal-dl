@@ -88,4 +88,5 @@ ln -sf /proc/self/fd/1 /var/log/auth.log
 
 # start ssh service
 # service ssh start
-service ssh restart && bash
+# service ssh restart && bash
+CMD ["/usr/sbin/sshd", "-D"]
