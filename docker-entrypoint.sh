@@ -43,7 +43,7 @@ fi
 # obtain password hash by config file
 if [[ -f "/config/password_hash.conf" ]]; then
     PASSWORD_HASH=$(cat "/config/password_hash.conf")
-elif [[ $PASSWORD ]]; then
+elif [[ $PASSWORD_HASH ]]; then
     PASSWORD_HASH=$(openssl passwd -6 $PASSWORD)
 fi
 
@@ -87,5 +87,5 @@ fi
 ln -sf /proc/self/fd/1 /var/log/auth.log
 
 # start ssh service
-echo "start ssh service"
+echo "sakdjkalsdjksaldjlsakdj"
 service ssh start
