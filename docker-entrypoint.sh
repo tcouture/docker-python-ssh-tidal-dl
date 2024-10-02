@@ -88,4 +88,4 @@ ln -sf /proc/self/fd/1 /var/log/auth.log
 
 # start ssh service
 echo "sakdjkalsdjksaldjlsakdj"
-service ssh start
+service ssh start -D
