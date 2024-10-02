@@ -41,7 +41,7 @@ if [[ $old_username ]]; then
 fi
 
 # obtain password hash by config file
-if [[ -f "/config/password.conf" ]]; then
+if [[ -f "/config/password_hash.conf" ]]; then
     PASSWORD_HASH=$(cat "/config/password_hash.conf")
 elif [[ $PASSWORD ]]; then
     PASSWORD_HASH=$(openssl passwd -6 $PASSWORD)
