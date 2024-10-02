@@ -48,7 +48,7 @@ elif [[ $PASSWORD_HASH ]]; then
 fi
 
 # create random password (no config file and no environmental variable were provided)
-if [[ ! $PASSWORD ]]; then
+if [[ ! $PASSWORD_HASH ]]; then
     PASSWORD=$(openssl rand -base64 12)
     echo "SSH password is $PASSWORD"
     PASSWORD_HASH=$(openssl passwd -6 $PASSWORD)
@@ -87,5 +87,4 @@ fi
 ln -sf /proc/self/fd/1 /var/log/auth.log
 
 # start ssh service
-echo "sakdjkalsdjksaldjlsakdj"
 service ssh start -D
